@@ -1,0 +1,23 @@
+[
+  {
+    "gradeId": 1,
+    "gradeName": "广东省一等奖",
+    "thoughtScore": 3,
+    "stylisticScore": 4,
+    "academicScore": 4
+  },
+  {
+    "gradeId": 2,
+    "gradeName": "广东省二等奖",
+    "thoughtScore": 2,
+    "stylisticScore": 3,
+    "academicScore": 3
+  },
+  {
+    "gradeId": 3,
+    "gradeName": "广东省三等奖",
+    "thoughtScore": 1,
+    "stylisticScore": 2,
+    "academicScore": 2
+  }
+]

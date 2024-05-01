@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StudentSubjectMapper">
+    
+    <resultMap type="StudentSubject" id="StudentSubjectResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="studentNumber"    column="student_number"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="subjectName"    column="subject_name"    />
+        <result property="score"    column="score"    />
+        <result property="allCredit"    column="all_credit"    />
+        <result property="subjectType"    column="subject_type"    />
+        <result property="academicYear"    column="academic_year"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectStudentSubjectVo">
+        select id, student_id, student_number, student_name, subject_id, subject_name, score, all_credit, subject_type, academic_year, status, del_flag, create_by, create_time, update_by, update_time, remark from student_subject
+    </sql>
+
+    <select id="selectStudentSubjectList" parameterType="StudentSubject" resultMap="StudentSubjectResult">
+        <include refid="selectStudentSubjectVo"/>
+        <where>  
+            <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
+            <if test="studentNumber != null "> and student_number = #{studentNumber}</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="subjectName != null  and subjectName != ''"> and subject_name like concat('%', #{subjectName}, '%')</if>
+            <if test="params.beginScore != null and params.beginScore != '' and params.endScore != null and params.endScore != ''"> and score between #{params.beginScore} and #{params.endScore}</if>
+            <if test="params.beginAllCredit != null and params.beginAllCredit != '' and params.endAllCredit != null and params.endAllCredit != ''"> and all_credit between #{params.beginAllCredit} and #{params.endAllCredit}</if>
+            <if test="subjectType != null  and subjectType != ''"> and subject_type = #{subjectType}</if>
+            <if test="academicYear != null "> and academic_year = #{academicYear}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+             and del_flag = false
+        </where>
+    </select>
+    
+    <select id="selectStudentSubjectById" parameterType="Long" resultMap="StudentSubjectResult">
+        <include refid="selectStudentSubjectVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertStudentSubject" parameterType="StudentSubject" useGeneratedKeys="true" keyProperty="id">
+        insert into student_subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="studentNumber != null">student_number,</if>
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="subjectName != null and subjectName != ''">subject_name,</if>
+            <if test="score != null">score,</if>
+            <if test="allCredit != null">all_credit,</if>
+            <if test="subjectType != null">subject_type,</if>
+            <if test="academicYear != null">academic_year,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="studentNumber != null">#{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="subjectName != null and subjectName != ''">#{subjectName},</if>
+            <if test="score != null">#{score},</if>
+            <if test="allCredit != null">#{allCredit},</if>
+            <if test="subjectType != null">#{subjectType},</if>
+            <if test="academicYear != null">#{academicYear},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudentSubject" parameterType="StudentSubject">
+        update student_subject
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentNumber != null">student_number = #{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="subjectName != null and subjectName != ''">subject_name = #{subjectName},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="allCredit != null">all_credit = #{allCredit},</if>
+            <if test="subjectType != null">subject_type = #{subjectType},</if>
+            <if test="academicYear != null">academic_year = #{academicYear},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudentSubjectById" parameterType="Long">
+        delete from student_subject where id = #{id}
+    </delete>
+
+    <delete id="deleteStudentSubjectByIds" parameterType="String">
+        delete from student_subject where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

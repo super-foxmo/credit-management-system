@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StructureSpecialtyMapper">
+
+    <resultMap type="StructureSpecialty" id="StructureSpecialtyResult">
+        <result property="specialtyId"    column="specialty_id"    />
+        <result property="specialtyName"    column="specialty_name"    />
+        <result property="collegeId"    column="college_id"    />
+        <result property="collegeName"    column="college_name"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectStructureSpecialtyVo">
+        select specialty_id, specialty_name, college_id, college_name, status, del_flag, create_by, create_time, update_by, update_time, remark from structure_specialty
+    </sql>
+
+    <select id="selectStructureSpecialtyList" parameterType="StructureSpecialty" resultMap="StructureSpecialtyResult">
+        <include refid="selectStructureSpecialtyVo"/>
+        <where>
+            <if test="specialtyName != null  and specialtyName != ''"> and specialty_name like concat('%', #{specialtyName}, '%')</if>
+            <if test="collegeName != null  and collegeName != ''"> and college_name like concat('%', #{collegeName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+             and del_flag = false
+        </where>
+    </select>
+
+    <select id="selectStructureSpecialtyBySpecialtyId" parameterType="Long" resultMap="StructureSpecialtyResult">
+        <include refid="selectStructureSpecialtyVo"/>
+        where specialty_id = #{specialtyId}
+    </select>
+
+    <insert id="insertStructureSpecialty" parameterType="StructureSpecialty" useGeneratedKeys="true" keyProperty="specialtyId">
+        insert into structure_specialty
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="specialtyName != null and specialtyName != ''">specialty_name,</if>
+            <if test="collegeId != null">college_id,</if>
+            <if test="collegeName != null and collegeName != ''">college_name,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="specialtyName != null and specialtyName != ''">#{specialtyName},</if>
+            <if test="collegeId != null">#{collegeId},</if>
+            <if test="collegeName != null and collegeName != ''">#{collegeName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateStructureSpecialty" parameterType="StructureSpecialty">
+        update structure_specialty
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="specialtyName != null and specialtyName != ''">specialty_name = #{specialtyName},</if>
+            <if test="collegeId != null">college_id = #{collegeId},</if>
+            <if test="collegeName != null and collegeName != ''">college_name = #{collegeName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where specialty_id = #{specialtyId}
+    </update>
+
+    <delete id="deleteStructureSpecialtyBySpecialtyId" parameterType="Long">
+        delete from structure_specialty where specialty_id = #{specialtyId}
+    </delete>
+
+    <delete id="deleteStructureSpecialtyBySpecialtyIds" parameterType="String">
+        delete from structure_specialty where specialty_id in
+        <foreach item="specialtyId" collection="array" open="(" separator="," close=")">
+            #{specialtyId}
+        </foreach>
+    </delete>
+</mapper>

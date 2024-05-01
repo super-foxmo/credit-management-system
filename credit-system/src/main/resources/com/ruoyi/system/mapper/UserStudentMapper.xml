@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserStudentMapper">
+    
+    <resultMap type="UserStudent" id="UserStudentResult">
+        <result property="studentId"    column="student_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="studentNumber"    column="student_number"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="age"    column="age"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="sex"    column="sex"    />
+        <result property="email"    column="email"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="password"    column="password"    />
+        <result property="entranceTime"    column="entrance_time"    />
+        <result property="collegeId"    column="college_id"    />
+        <result property="collegeName"    column="college_name"    />
+        <result property="specialtyId"    column="specialty_id"    />
+        <result property="specialtyName"    column="specialty_name"    />
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectUserStudentVo">
+        select student_id, user_id, student_number, student_name, age, birthday, sex, email, phone_number, avatar, password, entrance_time, college_id, college_name, specialty_id, specialty_name, class_id, class_name, status, del_flag, create_by, create_time, update_by, update_time, remark from user_student
+    </sql>
+
+    <select id="selectUserStudentList" parameterType="UserStudent" resultMap="UserStudentResult">
+        <include refid="selectUserStudentVo"/>
+        <where>  
+            <if test="studentNumber != null "> and student_number like concat('%', #{studentNumber}, '%')</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="params.beginAge != null and params.beginAge != '' and params.endAge != null and params.endAge != ''"> and age between #{params.beginAge} and #{params.endAge}</if>
+            <if test="params.beginBirthday != null and params.beginBirthday != '' and params.endBirthday != null and params.endBirthday != ''"> and birthday between #{params.beginBirthday} and #{params.endBirthday}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="phoneNumber != null  and phoneNumber != ''"> and phone_number = #{phoneNumber}</if>
+            <if test="params.beginEntranceTime != null and params.beginEntranceTime != '' and params.endEntranceTime != null and params.endEntranceTime != ''"> and entrance_time between #{params.beginEntranceTime} and #{params.endEntranceTime}</if>
+            <if test="collegeName != null  and collegeName != ''"> and college_name like concat('%', #{collegeName}, '%')</if>
+            <if test="specialtyName != null  and specialtyName != ''"> and specialty_name like concat('%', #{specialtyName}, '%')</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+             and del_flag = false
+        </where>
+    </select>
+    
+    <select id="selectUserStudentByStudentId" parameterType="Long" resultMap="UserStudentResult">
+        <include refid="selectUserStudentVo"/>
+        where student_id = #{studentId}
+    </select>
+        
+    <insert id="insertUserStudent" parameterType="UserStudent" useGeneratedKeys="true" keyProperty="studentId">
+        insert into user_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentNumber != null">student_number,</if>
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="age != null">age,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="sex != null">sex,</if>
+            <if test="email != null">email,</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="password != null">password,</if>
+            <if test="entranceTime != null">entrance_time,</if>
+            <if test="collegeId != null">college_id,</if>
+            <if test="collegeName != null and collegeName != ''">college_name,</if>
+            <if test="specialtyId != null">specialty_id,</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="className != null and className != ''">class_name,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentNumber != null">#{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="age != null">#{age},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="email != null">#{email},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="password != null">#{password},</if>
+            <if test="entranceTime != null">#{entranceTime},</if>
+            <if test="collegeId != null">#{collegeId},</if>
+            <if test="collegeName != null and collegeName != ''">#{collegeName},</if>
+            <if test="specialtyId != null">#{specialtyId},</if>
+            <if test="specialtyName != null and specialtyName != ''">#{specialtyName},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="className != null and className != ''">#{className},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserStudent" parameterType="UserStudent">
+        update user_student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentNumber != null">student_number = #{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number = #{phoneNumber},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="entranceTime != null">entrance_time = #{entranceTime},</if>
+            <if test="collegeId != null">college_id = #{collegeId},</if>
+            <if test="collegeName != null and collegeName != ''">college_name = #{collegeName},</if>
+            <if test="specialtyId != null">specialty_id = #{specialtyId},</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name = #{specialtyName},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="className != null and className != ''">class_name = #{className},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where student_id = #{studentId}
+    </update>
+
+    <delete id="deleteUserStudentByStudentId" parameterType="Long">
+        delete from user_student where student_id = #{studentId}
+    </delete>
+
+    <delete id="deleteUserStudentByStudentIds" parameterType="String">
+        delete from user_student where student_id in 
+        <foreach item="studentId" collection="array" open="(" separator="," close=")">
+            #{studentId}
+        </foreach>
+    </delete>
+
+    <select id="selectStudentBySpecialtyIdAndAcademicYear" parameterType="ScoreEvaluationQueryParams" resultMap="UserStudentResult">
+        select
+               student_id,
+               user_id,
+               student_number,
+               student_name,
+               age,
+               birthday,
+               sex,
+               email,
+               phone_number,
+               avatar,
+               password,
+               entrance_time,
+               college_id,
+               college_name,
+               specialty_id,
+               specialty_name,
+               class_id,
+               class_name,
+               (TIMESTAMPDIFF(YEAR, entrance_time, CURDATE()) + 1) AS academic_year,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from user_student
+        <where>
+            <if test="specialtyId != null  and specialtyId != ''">and specialty_id = #{specialtyId}</if>
+            and (TIMESTAMPDIFF(YEAR, entrance_time, CURDATE()) + 1) = #{academicYear}
+            and status = '0'
+            and del_flag = false
+        </where>
+    </select>
+</mapper>

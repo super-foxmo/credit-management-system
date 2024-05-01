@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SubjectInfoMapper">
+
+    <resultMap type="SubjectInfo" id="SubjectInfoResult">
+        <result property="subjectId"    column="subject_id"    />
+        <result property="subjectName"    column="subject_name"    />
+        <result property="teacherId"    column="teacher_id"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="allCredit"    column="all_credit"    />
+        <result property="collegeId"    column="college_id"    />
+        <result property="collegeName"    column="college_name"    />
+        <result property="specialtyId"    column="specialty_id"    />
+        <result property="specialtyName"    column="specialty_name"    />
+        <result property="subjectType"    column="subject_type"    />
+        <result property="academicYear"    column="academic_year"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSubjectInfoVo">
+        select subject_id, subject_name, teacher_id, teacher_name, all_credit, college_id, college_name, specialty_id, specialty_name, subject_type, academic_year, status, del_flag, create_by, create_time, update_by, update_time, remark from subject_info
+    </sql>
+
+    <select id="selectSubjectInfoList" parameterType="SubjectInfo" resultMap="SubjectInfoResult">
+        <include refid="selectSubjectInfoVo"/>
+        <where>
+            <if test="subjectName != null  and subjectName != ''"> and subject_name like concat('%', #{subjectName}, '%')</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="allCredit != null and allCredit != ''"> and all_credit = #{allCredit}</if>
+            <if test="collegeName != null  and collegeName != ''"> and college_name like concat('%', #{collegeName}, '%')</if>
+            <if test="specialtyName != null  and specialtyName != ''"> and specialty_name like concat('%', #{specialtyName}, '%')</if>
+            <if test="subjectType != null  and subjectType != ''"> and subject_type = #{subjectType}</if>
+            <if test="academicYear != null "> and academic_year = #{academicYear}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+             and del_flag = false
+        </where>
+    </select>
+
+    <select id="selectEnableSubjectInfoList" parameterType="SubjectInfo" resultMap="SubjectInfoResult">
+        <include refid="selectSubjectInfoVo"/>
+        <where>
+            <if test="subjectName != null  and subjectName != ''"> and subject_name like concat('%', #{subjectName}, '%')</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="allCredit != null and allCredit != ''"> and all_credit = #{allCredit}</if>
+            <if test="collegeId != null  and collegeId != ''"> and college_id =#{collegeId}</if>
+            <if test="academicYear != null and academicYear != ''"> and academic_year = #{academicYear}</if>
+             <if test="subjectType != null and subjectType != ''">
+                 and subject_type = #{subjectType}
+                 <if test="subjectType != 2">
+                    <if test="specialtyId != null  and specialtyId != ''"> and specialty_id = #{specialtyId} </if>
+                 </if>
+             </if>
+            <if test="subjectType == null or subjectType == ''">and (specialty_id = #{specialtyId} or subject_type = "2")</if>
+            and status = '0'
+            and del_flag = false
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectChooseCourseListByQueryParams" parameterType="SubjectInfo" resultMap="SubjectInfoResult">
+        select subject_id, subject_name, teacher_id, teacher_name, all_credit, college_id, college_name, specialty_id,
+        specialty_name, subject_type, academic_year, status, del_flag, create_by, create_time, update_by, update_time,
+        remark from
+        <include refid="selectSubjectInfoVo"/>
+        <where>
+            <if test="subjectName != null  and subjectName != ''"> and subject_name like concat('%', #{subjectName}, '%')</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="allCredit != null and allCredit != ''"> and all_credit = #{allCredit}</if>
+            <if test="collegeName != null  and collegeName != ''"> and college_id =#{collegeId}</if>
+            <if test="specialtyId != null  and specialtyId != ''"> and specialty_id = #{specialtyId}</if>
+            <if test="academicYear != null and academicYear != ''"> and academic_year = #{academicYear}</if>
+            and status = '0'
+            and del_flag = false
+        </where>
+    </select>
+
+    <select id="selectSubjectInfoBySubjectId" parameterType="Long" resultMap="SubjectInfoResult">
+        <include refid="selectSubjectInfoVo"/>
+        where subject_id = #{subjectId}
+    </select>
+
+    <insert id="insertSubjectInfo" parameterType="SubjectInfo" useGeneratedKeys="true" keyProperty="subjectId">
+        insert into subject_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subjectName != null and subjectName != ''">subject_name,</if>
+            <if test="teacherId != null">teacher_id,</if>
+            <if test="teacherName != null and teacherName != ''">teacher_name,</if>
+            <if test="allCredit != null">all_credit,</if>
+            <if test="collegeId != null">college_id,</if>
+            <if test="collegeName != null and collegeName != ''">college_name,</if>
+            <if test="specialtyId != null">specialty_id,</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name,</if>
+            <if test="subjectType != null and subjectType != ''">subject_type,</if>
+            <if test="academicYear != null">academic_year,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subjectName != null and subjectName != ''">#{subjectName},</if>
+            <if test="teacherId != null">#{teacherId},</if>
+            <if test="teacherName != null and teacherName != ''">#{teacherName},</if>
+            <if test="allCredit != null">#{allCredit},</if>
+            <if test="collegeId != null">#{collegeId},</if>
+            <if test="collegeName != null and collegeName != ''">#{collegeName},</if>
+            <if test="specialtyId != null">#{specialtyId},</if>
+            <if test="specialtyName != null and specialtyName != ''">#{specialtyName},</if>
+            <if test="subjectType != null and subjectType != ''">#{subjectType},</if>
+            <if test="academicYear != null">#{academicYear},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSubjectInfo" parameterType="SubjectInfo">
+        update subject_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="subjectName != null and subjectName != ''">subject_name = #{subjectName},</if>
+            <if test="teacherId != null">teacher_id = #{teacherId},</if>
+            <if test="teacherName != null and teacherName != ''">teacher_name = #{teacherName},</if>
+            <if test="allCredit != null">all_credit = #{allCredit},</if>
+            <if test="collegeId != null">college_id = #{collegeId},</if>
+            <if test="collegeName != null and collegeName != ''">college_name = #{collegeName},</if>
+            <if test="specialtyId != null">specialty_id = #{specialtyId},</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name = #{specialtyName},</if>
+            <if test="subjectType != null and subjectType != ''">subject_type = #{subjectType},</if>
+            <if test="academicYear != null">academic_year = #{academicYear},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where subject_id = #{subjectId}
+    </update>
+
+    <delete id="deleteSubjectInfoBySubjectId" parameterType="Long">
+        delete from subject_info where subject_id = #{subjectId}
+    </delete>
+
+    <delete id="deleteSubjectInfoBySubjectIds" parameterType="String">
+        delete from subject_info where subject_id in
+        <foreach item="subjectId" collection="array" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+    </delete>
+</mapper>

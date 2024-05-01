@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ComprehensiveEvaluationMapper">
+
+    <resultMap type="ComprehensiveEvaluation" id="ComprehensiveEvaluationResult">
+        <result property="comprehensiveId" column="comprehensive_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="studentNumber" column="student_number"/>
+        <result property="studentName" column="student_name"/>
+        <result property="classId" column="class_id"/>
+        <result property="className" column="class_name"/>
+        <result property="specialtyId" column="specialty_id"/>
+        <result property="specialtyName" column="specialty_name"/>
+        <result property="synthesizeScore" column="synthesize_score"/>
+        <result property="score" column="score"/>
+        <result property="GPA" column="GPA"/>
+        <result property="thoughtScore" column="thought_score"/>
+        <result property="stylisticScore" column="stylistic_score"/>
+        <result property="academicScore" column="academic_score"/>
+        <result property="academicYear" column="academic_year"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectComprehensiveEvaluationVo">
+        select comprehensive_id,
+               student_id,
+               student_number,
+               student_name,
+               class_id,
+               class_name,
+               specialty_id,
+               specialty_name,
+               synthesize_score,
+               score,
+               GPA,
+               thought_score,
+               stylistic_score,
+               academic_score,
+               academic_year,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from comprehensive_evaluation
+    </sql>
+
+    <select id="selectComprehensiveEvaluationList" parameterType="ComprehensiveEvaluation" resultMap="ComprehensiveEvaluationResult">
+        select
+               comprehensive_id,
+               student_id,
+               student_number,
+               student_name,
+               class_id,
+               class_name,
+               specialty_id,
+               specialty_name,
+               synthesize_score,
+               score,
+               GPA,
+               thought_score,
+               stylistic_score,
+               academic_score,
+               academic_year,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from comprehensive_evaluation
+        <where>
+            <if test="studentNumber != null ">and student_number = #{studentNumber}</if>
+            <if test="studentName != null  and studentName != ''">and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="className != null  and className != ''">and class_name like concat('%', #{className}, '%')</if>
+            <if test="specialtyName != null  and specialtyName != ''">and specialty_name like concat('%', #{specialtyName}, '%')</if>
+            <if test="academicYear != null ">and academic_year = # {academicYear}</if>
+            and status = '0'
+            and del_flag = false
+        </where>
+    </select>
+
+
+    <select id="selectSpecialtySort" parameterType="ComprehensiveEvaluation" resultMap="ComprehensiveEvaluationResult">
+        select
+               comprehensive_id,
+               student_id,
+               student_number,
+               student_name,
+               class_id,
+               class_name,
+               specialty_id,
+               specialty_name,
+               synthesize_score,
+               score,
+               GPA,
+               thought_score,
+               stylistic_score,
+               academic_score,
+               academic_year,
+               RANK() OVER (ORDER BY synthesize_score DESC) AS specialty_sort,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from comprehensive_evaluation
+        <where>
+            <if test="specialtyId != null  and specialtyId != ''">and specialty_id = #{specialtyId} </if>
+            <if test="academicYear != null and academicYear != ''">and academic_year = #{academicYear}</if>
+            and status = '0'
+            and del_flag = false
+        </where>
+    </select>
+
+    <select id="selectClassSort" parameterType="ComprehensiveEvaluation" resultMap="ComprehensiveEvaluationResult">
+        select
+               comprehensive_id,
+               student_id,
+               student_number,
+               student_name,
+               class_id,
+               class_name,
+               specialty_id,
+               specialty_name,
+               synthesize_score,
+               score,
+               GPA,
+               thought_score,
+               stylistic_score,
+               academic_score,
+               academic_year,
+               RANK() OVER (ORDER BY synthesize_score DESC) AS class_Sort,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from comprehensive_evaluation
+        <where>
+            <if test="classId != null  and classId != ''">and class_id = #{classId} </if>
+            <if test="academicYear != null and academicYear != ''">and academic_year = #{academicYear}</if>
+            and status = '0'
+            and del_flag = false
+        </where>
+    </select>
+
+
+    <select id="selectComprehensiveEvaluationByComprehensiveId" parameterType="Long"
+            resultMap="ComprehensiveEvaluationResult">
+        <include refid="selectComprehensiveEvaluationVo"/>
+        where comprehensive_id = #{comprehensiveId}
+    </select>
+
+    <insert id="insertComprehensiveEvaluation" parameterType="ComprehensiveEvaluation" useGeneratedKeys="true"
+            keyProperty="comprehensiveId">
+        insert into comprehensive_evaluation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="studentNumber != null">student_number,</if>
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="className != null and className != ''">class_name,</if>
+            <if test="specialtyId != null">specialty_id,</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name,</if>
+            <if test="synthesizeScore != null">synthesize_score,</if>
+            <if test="score != null">score,</if>
+            <if test="GPA != null">GPA,</if>
+            <if test="thoughtScore != null">thought_score,</if>
+            <if test="stylisticScore != null">stylistic_score,</if>
+            <if test="academicScore != null">academic_score,</if>
+            <if test="academicYear != null">academic_year,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="studentNumber != null">#{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="className != null and className != ''">#{className},</if>
+            <if test="specialtyId != null">#{specialtyId},</if>
+            <if test="specialtyName != null and specialtyName != ''">#{specialtyName},</if>
+            <if test="synthesizeScore != null">#{synthesizeScore},</if>
+            <if test="score != null">#{score},</if>
+            <if test="GPA != null">#{GPA},</if>
+            <if test="thoughtScore != null">#{thoughtScore},</if>
+            <if test="stylisticScore != null">#{stylisticScore},</if>
+            <if test="academicScore != null">#{academicScore},</if>
+            <if test="academicYear != null">#{academicYear},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateComprehensiveEvaluation" parameterType="ComprehensiveEvaluation">
+        update comprehensive_evaluation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentNumber != null">student_number = #{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="className != null and className != ''">class_name = #{className},</if>
+            <if test="specialtyId != null">specialty_id = #{specialtyId},</if>
+            <if test="specialtyName != null and specialtyName != ''">specialty_name = #{specialtyName},</if>
+            <if test="synthesizeScore != null">synthesize_score = #{synthesizeScore},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="GPA != null">GPA = #{GPA},</if>
+            <if test="thoughtScore != null">thought_score = #{thoughtScore},</if>
+            <if test="stylisticScore != null">stylistic_score = #{stylisticScore},</if>
+            <if test="academicScore != null">academic_score = #{academicScore},</if>
+            <if test="academicYear != null">academic_year = #{academicYear},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where comprehensive_id = #{comprehensiveId}
+    </update>
+
+    <delete id="deleteComprehensiveEvaluationByComprehensiveId" parameterType="Long">
+        delete
+        from comprehensive_evaluation
+        where comprehensive_id = #{comprehensiveId}
+    </delete>
+
+    <delete id="deleteComprehensiveEvaluationByComprehensiveIds" parameterType="String">
+        delete from comprehensive_evaluation where comprehensive_id in
+        <foreach item="comprehensiveId" collection="array" open="(" separator="," close=")">
+            #{comprehensiveId}
+        </foreach>
+    </delete>
+</mapper>

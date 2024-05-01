@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CompetitionAwardsMapper">
+    
+    <resultMap type="CompetitionAwards" id="CompetitionAwardsResult">
+        <result property="awardsId"    column="awards_id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="studentNumber"    column="student_number"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="activityName"    column="activity_name"    />
+        <result property="gradeId"    column="grade_id"    />
+        <result property="gradeName"    column="grade_name"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCompetitionAwardsVo">
+        select awards_id, student_id, student_number, student_name, activity_id, activity_name, grade_id, grade_name, status, del_flag, create_by, create_time, update_by, update_time, remark from competition_awards
+    </sql>
+
+    <select id="selectCompetitionAwardsList" parameterType="CompetitionAwards" resultMap="CompetitionAwardsResult">
+        <include refid="selectCompetitionAwardsVo"/>
+        <where>  
+            <if test="studentNumber != null "> and student_number like concat('%', #{studentNumber}, '%')</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="activityName != null  and activityName != ''"> and activity_name like concat('%', #{activityName}, '%')</if>
+            <if test="gradeName != null  and gradeName != ''"> and grade_name like concat('%', #{gradeName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+             and del_flag = false
+        </where>
+    </select>
+    
+    <select id="selectCompetitionAwardsByAwardsId" parameterType="Long" resultMap="CompetitionAwardsResult">
+        <include refid="selectCompetitionAwardsVo"/>
+        where awards_id = #{awardsId}
+    </select>
+        
+    <insert id="insertCompetitionAwards" parameterType="CompetitionAwards" useGeneratedKeys="true" keyProperty="awardsId">
+        insert into competition_awards
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="studentNumber != null">student_number,</if>
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="activityName != null and activityName != ''">activity_name,</if>
+            <if test="gradeId != null">grade_id,</if>
+            <if test="gradeName != null and gradeName != ''">grade_name,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="studentNumber != null">#{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="activityName != null and activityName != ''">#{activityName},</if>
+            <if test="gradeId != null">#{gradeId},</if>
+            <if test="gradeName != null and gradeName != ''">#{gradeName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCompetitionAwards" parameterType="CompetitionAwards">
+        update competition_awards
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentNumber != null">student_number = #{studentNumber},</if>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="activityName != null and activityName != ''">activity_name = #{activityName},</if>
+            <if test="gradeId != null">grade_id = #{gradeId},</if>
+            <if test="gradeName != null and gradeName != ''">grade_name = #{gradeName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where awards_id = #{awardsId}
+    </update>
+
+    <delete id="deleteCompetitionAwardsByAwardsId" parameterType="Long">
+        delete from competition_awards where awards_id = #{awardsId}
+    </delete>
+
+    <delete id="deleteCompetitionAwardsByAwardsIds" parameterType="String">
+        delete from competition_awards where awards_id in 
+        <foreach item="awardsId" collection="array" open="(" separator="," close=")">
+            #{awardsId}
+        </foreach>
+    </delete>
+</mapper>
